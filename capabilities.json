@@ -11,6 +11,7 @@
             "kind": "Measure"
         }
     ],
+    "supportsHighlight": true,
     "objects": {
         "dataPoint": {
             "displayName": "Data colors",
@@ -47,12 +48,35 @@
                         "fill": {}
                     }
                 },
-                 "fontSize": {
+                "fontSize": {
                     "displayName": "Text Size",
                     "type": {
                         "formatting": {
                             "fontSize": true
                         }
+                    }
+                },
+                "valueReduceStrategy": {
+                    "displayName": "Reduce Strategy",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "First",
+                                "value": "First"
+                            },
+                            {
+                                "displayName": "Last",
+                                "value": "Last"
+                            },
+                            {
+                                "displayName": "Average",
+                                "value": "Average"
+                            },
+                            {
+                                "displayName": "Sum",
+                                "value": "Sum"
+                            }
+                        ]
                     }
                 }
             }
@@ -66,7 +90,9 @@
                         "in": "category"
                     },
                     "dataReductionAlgorithm": {
-                        "top": {}
+                        "top": {
+                            "count": 100000
+                        }
                     }
                 },
                 "values": {

@@ -6,13 +6,13 @@
     "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "",
-    "supportUrl": "",
-    "gitHubUrl": ""
+    "supportUrl": "https://github.com/KristofferBerge/pbiviz-value-displayer/issues",
+    "gitHubUrl": "https://github.com/KristofferBerge/pbiviz-value-displayer"
   },
   "apiVersion": "1.8.0",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Kristoffer Møgster Berge",
+    "email": "kristoffer.berge@gmail.com"
   },
   "assets": {
     "icon": "assets/icon.png"

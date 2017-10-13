@@ -33,31 +33,93 @@ module powerbi.extensibility.visual {
         private textNode: Text;
 
         constructor(options: VisualConstructorOptions) {
-            console.log('Visual constructor', options);
+            // console.log('Visual constructor', options);
             this.target = options.element;
-            this.updateCount = 0;
-            if (typeof document !== "undefined") {
-                const new_p: HTMLElement = document.createElement("p");
-                new_p.appendChild(document.createTextNode("Update count:"));
-                const new_em: HTMLElement = document.createElement("em");
-                this.textNode = document.createTextNode(this.updateCount.toString());
-                new_em.appendChild(this.textNode);
-                new_p.appendChild(new_em);
-                this.target.appendChild(new_p);
-            }
+            // this.updateCount = 0;
+            // if (typeof document !== "undefined") {
+            //     const new_p: HTMLElement = document.createElement("div");
+            //     new_p.appendChild(document.createTextNode("Update count:"));
+            //     const new_em: HTMLElement = document.createElement("em");
+            //     this.textNode = document.createTextNode(this.updateCount.toString());
+            //     new_em.appendChild(this.textNode);
+            //     new_p.appendChild(new_em);
+            //     this.target.appendChild(new_p);
+            // }
         }
 
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-            console.log('Visual update', options);
-            if (typeof this.textNode !== "undefined") {
-                this.textNode.textContent = (this.updateCount++).toString();
+            const values = this.getValuesToDisplay(options);
+            let displayValue;
+            let strategy;
+            if (values.length == 1) {
+                //If only one value is selected
+                displayValue = values[0];
+            }
+            else {
+                //If several values are selected
+                let sum = values.reduce((tot, v) => { return tot + v; });
+                switch (this.settings.dataPoint.valueReduceStrategy) {
+                    case "Average":
+                        displayValue = Math.floor(sum / values.length);
+                        strategy = "Average";
+                        break;
+                    case "Sum":
+                        displayValue = sum;
+                        strategy = "Sum";
+                        break;
+                    case "First":
+                        displayValue = values[0];
+                        strategy = "First";
+                        break;
+                    case "Last":
+                        displayValue = values[values.length - 1];
+                        strategy = "Last";
+                        break;
+                }
+            }
+
+            this.render(displayValue, strategy);
+        }
+
+        private render(value: number, strategy: string) {
+            this.target.innerHTML = "";
+            let container = document.createElement("div");
+            let valueElement = document.createElement("h1");
+            valueElement.setAttribute("class", "valueElement");
+            valueElement.innerHTML = value.toString();
+            container.appendChild(valueElement);
+            this.target.appendChild(container);
+
+            // Add explanation if value reduction is performed
+            if (strategy) {
+                let explanation = document.createElement("div");
+                explanation.innerHTML = strategy;
+                explanation.setAttribute("class","explanationElement")
+                container.appendChild(explanation);
             }
         }
 
         private static parseSettings(dataView: DataView): VisualSettings {
             return VisualSettings.parse(dataView) as VisualSettings;
         }
+
+        /**
+         * Returns an array of values that is the values to be displayed.
+         * If any values are highlighted, only highlighted values are returned
+         * @param options The visual update options
+         */
+        private getValuesToDisplay(options: VisualUpdateOptions): Array<number> {
+            const values = options.dataViews[0].categorical.values; // Just get the first array of values
+            let highlights = values[0].highlights; // If highlights is undefined, nothing is selected
+            if (highlights) {
+                // Something is highlighted.
+                return highlights.filter((v) => { return v != null }) as Array<number>;
+            }
+            // If nothing is highlighted, return all values
+            return values[0].values as Array<number>;
+        }
+
 
         /** 
          * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the 

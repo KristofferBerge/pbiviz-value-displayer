@@ -43,6 +43,7 @@ module powerbi.extensibility.visual {
       public fillRule: string = "";
      // Text Size
       public fontSize: number = 12;
-     }
 
+      public valueReduceStrategy: string = ""
+     }
 }
