@@ -33,18 +33,7 @@ module powerbi.extensibility.visual {
         private textNode: Text;
 
         constructor(options: VisualConstructorOptions) {
-            // console.log('Visual constructor', options);
             this.target = options.element;
-            // this.updateCount = 0;
-            // if (typeof document !== "undefined") {
-            //     const new_p: HTMLElement = document.createElement("div");
-            //     new_p.appendChild(document.createTextNode("Update count:"));
-            //     const new_em: HTMLElement = document.createElement("em");
-            //     this.textNode = document.createTextNode(this.updateCount.toString());
-            //     new_em.appendChild(this.textNode);
-            //     new_p.appendChild(new_em);
-            //     this.target.appendChild(new_p);
-            // }
         }
 
         public update(options: VisualUpdateOptions) {
@@ -61,7 +50,7 @@ module powerbi.extensibility.visual {
                 let sum = values.reduce((tot, v) => { return tot + v; });
                 switch (this.settings.dataPoint.valueReduceStrategy) {
                     case "Average":
-                        displayValue = Math.floor(sum / values.length);
+                        displayValue = sum / values.length;
                         strategy = "Average";
                         break;
                     case "Sum":
@@ -78,14 +67,15 @@ module powerbi.extensibility.visual {
                         break;
                 }
             }
-
+            if (displayValue.toString().split(".")[1])
+                displayValue = displayValue.toFixed(2)
             this.render(displayValue, strategy);
         }
 
         private render(value: number, strategy: string) {
             this.target.innerHTML = "";
             let container = document.createElement("div");
-            let valueElement = document.createElement("h1");
+            let valueElement = document.createElement("div");
             valueElement.setAttribute("class", "valueElement");
             valueElement.innerHTML = value.toString();
             container.appendChild(valueElement);
@@ -95,7 +85,7 @@ module powerbi.extensibility.visual {
             if (strategy) {
                 let explanation = document.createElement("div");
                 explanation.innerHTML = strategy;
-                explanation.setAttribute("class","explanationElement")
+                explanation.setAttribute("class", "explanationElement")
                 container.appendChild(explanation);
             }
         }
