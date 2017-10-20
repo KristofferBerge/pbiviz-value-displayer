@@ -45,5 +45,7 @@ module powerbi.extensibility.visual {
       public fontSize: number = 12;
 
       public valueReduceStrategy: string = ""
+      public valueFontSize: number = 12;
+      public captionFontSize: number = 8;
      }
 }

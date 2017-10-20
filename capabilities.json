@@ -78,6 +78,22 @@
                             }
                         ]
                     }
+                },
+                "valueFontSize": {
+                    "displayName": "Value Font Size",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "captionFontSize": {
+                    "displayName": "Caption Font Size",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
                 }
             }
         }

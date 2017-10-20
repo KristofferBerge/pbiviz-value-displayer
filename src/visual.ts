@@ -76,6 +76,7 @@ module powerbi.extensibility.visual {
             this.target.innerHTML = "";
             let container = document.createElement("div");
             let valueElement = document.createElement("div");
+            valueElement.setAttribute("style", "font-size: " + this.settings.dataPoint.valueFontSize.toString() + "px")
             valueElement.setAttribute("class", "valueElement");
             valueElement.innerHTML = value.toString();
             container.appendChild(valueElement);
@@ -86,6 +87,7 @@ module powerbi.extensibility.visual {
                 let explanation = document.createElement("div");
                 explanation.innerHTML = strategy;
                 explanation.setAttribute("class", "explanationElement")
+                explanation.setAttribute("style", "font-size: " + this.settings.dataPoint.captionFontSize.toString() + "px")
                 container.appendChild(explanation);
             }
         }
